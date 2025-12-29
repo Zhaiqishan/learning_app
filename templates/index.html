@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center text-white py-20">
+    <h1 class="text-6xl font-bold mb-6 animate-pulse">Welcome to Learning Hub</h1>
+    <p class="text-2xl mb-12">Your journey to knowledge starts here ✨</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+        <a href="{{ url_for('qa') }}" class="card glass-effect hover:scale-105 transition transform">
+            <div class="card-body items-center text-center">
+                <div class="text-5xl mb-4">💬</div>
+                <h3 class="card-title">Q&A Community</h3>
+                <p>Ask questions, share knowledge</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('awards') }}" class="card glass-effect hover:scale-105 transition transform">
+            <div class="card-body items-center text-center">
+                <div class="text-5xl mb-4">🏆</div>
+                <h3 class="card-title">Awards</h3>
+                <p>Celebrate achievements</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('calendar') }}" class="card glass-effect hover:scale-105 transition transform">
+            <div class="card-body items-center text-center">
+                <div class="text-5xl mb-4">📅</div>
+                <h3 class="card-title">Calendar</h3>
+                <p>Plan your learning journey</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('ranking') }}" class="card glass-effect hover:scale-105 transition transform">
+            <div class="card-body items-center text-center">
+                <div class="text-5xl mb-4">📊</div>
+                <h3 class="card-title">Ranking</h3>
+                <p>Track your progress</p>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

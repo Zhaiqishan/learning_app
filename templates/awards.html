@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-effect p-8 rounded-lg text-white">
+    <h1 class="text-4xl font-bold mb-6">🏆 Awards & Recognition</h1>
+
+    <!-- Top 3 & Bottom 3 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Top 3 -->
+        <div class="card bg-gradient-to-br from-yellow-600 to-yellow-800">
+            <div class="card-body">
+                <h2 class="card-title text-2xl">👑 Top 3 Learners (This Month)</h2>
+                {% if top_3 %}
+                <div class="space-y-2">
+                    {% for user in top_3 %}
+                    <div class="flex justify-between items-center bg-black/20 p-3 rounded">
+                        <span class="font-bold">
+                            {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% else %}🥉{% endif %}
+                            {{ user.username }}
+                        </span>
+                        <span class="badge badge-warning">{{ user.total_time }} min</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-4 text-sm">
+                    <p><strong>Titles:</strong></p>
+                    <p>🥇 The Zenith Scholar</p>
+                    <p>🥈 Apex Grinder</p>
+                    <p>🥉 Marathon Mind</p>
+                </div>
+                {% else %}
+                <p>No study logs this month yet!</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Bottom 3 -->
+        <div class="card bg-gradient-to-br from-blue-600 to-blue-800">
+            <div class="card-body">
+                <h2 class="card-title text-2xl">😴 Bottom 3 Learners (This Month)</h2>
+                {% if bottom_3 %}
+                <div class="space-y-2">
+                    {% for user in bottom_3 %}
+                    <div class="flex justify-between items-center bg-black/20 p-3 rounded">
+                        <span>{{ user.username }}</span>
+                        <span class="badge badge-info">{{ user.total_time }} min</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-4 text-sm">
+                    <p><strong>Titles:</strong></p>
+                    <p>💤 The Idle Observer</p>
+                    <p>😴 Slumber Sage</p>
+                    <p>🚶 Casual Voyager</p>
+                </div>
+                {% else %}
+                <p>Not enough data yet!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Vote for Award Options -->
+    <div class="card bg-base-200 mb-8">
+        <div class="card-body">
+            <h2 class="card-title text-2xl">🗳️ Vote for Award Options (Select up to 3)</h2>
+            <form method="POST" action="{{ url_for('vote_award') }}">
+                <div class="space-y-2">
+                    {% for option in options %}
+                    <div class="form-control">
+                        <label class="label cursor-pointer justify-start gap-4">
+                            <input type="checkbox" name="options" value="{{ option.id }}"
+                                   class="checkbox checkbox-primary"
+                                   {% if option.id in user_votes %}checked{% endif %}>
+                            <span class="flex-1">{{ option.description }}</span>
+                            <span class="badge badge-accent">{{ option.vote_count }} votes</span>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary mt-4">Submit Votes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Suggest New Award -->
+    <div class="card bg-base-200">
+        <div class="card-body">
+            <h2 class="card-title text-2xl">💡 Suggest New Award/Punishment</h2>
+            <form method="POST" action="{{ url_for('suggest_award') }}">
+                <div class="form-control">
+                    <textarea name="suggestion" placeholder="Your creative idea..." required rows="3"
+                              class="textarea textarea-bordered"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success mt-3">Submit Suggestion</button>
+            </form>
+
+            <!-- Display Suggestions -->
+            {% if suggestions %}
+            <div class="mt-6">
+                <h3 class="font-bold mb-2">Recent Suggestions:</h3>
+                {% for suggestion in suggestions[:5] %}
+                <div class="bg-base-300 p-3 rounded mb-2">
+                    <p>{{ suggestion.suggestion }}</p>
+                    <p class="text-sm text-gray-400">by {{ suggestion.user.username }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

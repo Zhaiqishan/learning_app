@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Learning Hub{% endblock %}</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Confetti Effects -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="font-sans" data-theme="dark">
+    {% if current_user.is_authenticated %}
+    <nav class="glass-effect text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{{ url_for('index') }}" class="text-2xl font-bold">🎓 Learning Hub</a>
+            <div class="space-x-4">
+                <a href="{{ url_for('qa') }}" class="hover:text-indigo-200">Q&A</a>
+                <a href="{{ url_for('awards') }}" class="hover:text-indigo-200">Awards</a>
+                <a href="{{ url_for('calendar') }}" class="hover:text-indigo-200">Calendar</a>
+                <a href="{{ url_for('ranking') }}" class="hover:text-indigo-200">Ranking</a>
+                <span class="text-emerald-300">👤 {{ current_user.username }}</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-error btn-sm">Logout</a>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <div class="container mx-auto p-6">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert {% if category == 'error' %}alert-error{% else %}alert-success{% endif %} mb-4">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

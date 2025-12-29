@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-effect p-8 rounded-lg text-white">
+    <h1 class="text-4xl font-bold mb-6">📊 Daily Ranking Leaderboard</h1>
+
+    <!-- Log Study Time Form -->
+    <div class="card bg-base-200 mb-8">
+        <div class="card-body">
+            <h2 class="card-title">📝 Log Today's Study Time</h2>
+            <form method="POST" action="{{ url_for('log_study') }}">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Study Time (minutes)</span>
+                        </label>
+                        <input type="number" name="study_time" required min="1"
+                               class="input input-bordered" placeholder="e.g., 120">
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Study Content</span>
+                        </label>
+                        <input type="text" name="study_content" required
+                               class="input input-bordered" placeholder="e.g., Math Chapter 5">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-4">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rankings -->
+    <div class="card bg-base-200">
+        <div class="card-body">
+            <h2 class="card-title text-2xl">🏆 Today's Rankings</h2>
+            {% if rankings %}
+            <div class="overflow-x-auto">
+                <table class="table table-zebra w-full">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Username</th>
+                            <th>Study Time</th>
+                            <th>Content</th>
+                            <th>Title</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ranking in rankings %}
+                        <tr class="{% if loop.index <= 3 %}bg-gradient-to-r from-yellow-600/20{% endif %}">
+                            <td class="font-bold text-2xl">
+                                {% if loop.index == 1 %}
+                                    🥇
+                                {% elif loop.index == 2 %}
+                                    🥈
+                                {% elif loop.index == 3 %}
+                                    🥉
+                                {% else %}
+                                    {{ loop.index }}
+                                {% endif %}
+                            </td>
+                            <td class="font-bold">{{ ranking.username }}</td>
+                            <td>
+                                <span class="badge badge-primary">{{ ranking.study_time }} min</span>
+                            </td>
+                            <td>{{ ranking.study_content }}</td>
+                            <td>
+                                {% if loop.index == 1 %}
+                                <div class="badge badge-warning gap-2">
+                                    👑 Involution King
+                                </div>
+                                {% elif loop.index == 2 %}
+                                <div class="badge badge-accent gap-2">
+                                    🐕 Involution Hound
+                                </div>
+                                {% elif loop.index == 3 %}
+                                <div class="badge badge-info gap-2">
+                                    🥷 Stealth Roller
+                                </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <p>No study logs for today yet. Be the first to log your study time!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Title Explanations -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="card bg-gradient-to-br from-yellow-600 to-orange-600">
+            <div class="card-body">
+                <h3 class="card-title">👑 Involution King</h3>
+                <p class="text-sm">Awarded to the #1 ranked student</p>
+                <p class="text-xs mt-2">Gold seal of excellence</p>
+            </div>
+        </div>
+        <div class="card bg-gradient-to-br from-gray-400 to-gray-600">
+            <div class="card-body">
+                <h3 class="card-title">🐕 Involution Hound</h3>
+                <p class="text-sm">Awarded to the #2 ranked student</p>
+                <p class="text-xs mt-2">Silver badge of dedication</p>
+            </div>
+        </div>
+        <div class="card bg-gradient-to-br from-orange-400 to-red-600">
+            <div class="card-body">
+                <h3 class="card-title">🥷 Stealth Roller</h3>
+                <p class="text-sm">Awarded to the #3 ranked student</p>
+                <p class="text-xs mt-2">Bronze medal of persistence</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
